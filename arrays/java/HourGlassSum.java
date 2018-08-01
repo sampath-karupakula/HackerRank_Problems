@@ -3,40 +3,45 @@ import java.util.*;
 
 public class HourGlassSum {
 
-    public static void main(String[] args) {
-        List<List<Integer>> m = readValues();
-        int max = Integer.MIN_VALUE;
-        for(int r = 0; r < 4; r++){
-            for(int c = 0; c < 4; c++){
-                int total = m.get(r).get(c)+
-                        m.get(r).get(c+1)+
-                        m.get(r).get(c+2)+
-                        m.get(r+1).get(c+1)+
-                        m.get(r+2).get(c)+
-                        m.get(r+2).get(c+1)+
-                        m.get(r+2).get(c+2);
-                if(total > max)
-                    max = total;
+     // Complete the hourglassSum function below.
+    static int hourglassSum(int[][] arr) {
+        ArrayList al = new ArrayList();
+        for( int r = 0; r < arr.length - 2; r++) {
+            for(int c = 1; c < arr[0].length - 1; c++) {
+                int h = arr[r][c-1]+ arr[r][c]+ arr[r][c+1] + arr[r + 1][c]
+                    +  arr[r+2][c-1]+ arr[r+2][c]+ arr[r +2][c+1] ;
+                al.add(h);
             }
         }
-        System.out.print(max);
-
+        Collections.sort(al);
+        System.out.print(al);
+        return (int) al.get(al.size() - 1);
     }
 
+    private static final Scanner scanner = new Scanner(System.in);
 
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-    public static List<List<Integer>> readValues(){
-        Scanner sc = new Scanner(System.in);
-        List<List<Integer>> ma = new ArrayList<List<Integer>>();
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] values = line.split(" ");
-            List<Integer> l = new ArrayList<Integer>();
-            for(String value : values){
-                l.add(Integer.parseInt(value));
+        int[][] arr = new int[6][6];
+
+        for (int i = 0; i < 6; i++) {
+            String[] arrRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int j = 0; j < 6; j++) {
+                int arrItem = Integer.parseInt(arrRowItems[j]);
+                arr[i][j] = arrItem;
             }
-            ma.add(l);
         }
-        return ma;
+
+        int result = hourglassSum(arr);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
     }
 }
